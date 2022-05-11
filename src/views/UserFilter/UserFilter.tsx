@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { FixedSizeList } from 'react-window'
-import { RowRenderer } from './components/RowRenderer'
+import { FilterInput } from './components/FilterInput'
+import { ListItemRenderer } from './components/ListItemRenderer'
 
 const USERS_API = 'https://random-persons.herokuapp.com/users'
 
@@ -9,7 +10,7 @@ export type User = {
   age: number
 }
 
-export const Home: React.FC = () => {
+export const UserFilter: React.FC = () => {
   const [users, setUsers] = useState<User[]>([])
   const [loadingUsers, setLoadingUsers] = useState<boolean>(false)
   const [filterType, setFilterType] = useState<'name' | 'age'>('name')
@@ -26,12 +27,9 @@ export const Home: React.FC = () => {
     setLoadingUsers(false)
   }
 
-  useEffect(() => {
-    getUsers()
-  }, [])
-
-  const filterByName: React.ChangeEventHandler<HTMLInputElement> = (e) => {
+  const filterUser: React.ChangeEventHandler<HTMLInputElement> = (e) => {
     const keyword = e.target.value
+    console.log(`keyword: ${keyword} | filter type: ${filterType}`)
 
     if (keyword !== '') {
       const results = users.filter((user) => {
@@ -47,23 +45,22 @@ export const Home: React.FC = () => {
     }
   }
 
+  const changeFilterType: React.ChangeEventHandler<HTMLSelectElement> = (e) =>
+    setFilterType(e.target.value as 'name' | 'age')
+
+  useEffect(() => {
+    getUsers()
+  }, [])
+
   return (
     <>
       <h1>Listagem de Usuários ({filteredUsers.length})</h1>
       {loadingUsers ? <h2>Carregando...</h2> : null}
-      <input
-        type='search'
-        onChange={filterByName}
+      <FilterInput
         disabled={loadingUsers}
-        placeholder='Pesquise...'
+        onChangeFilterInput={filterUser}
+        onChangeFilterType={changeFilterType}
       />
-      <select
-        name='filterType'
-        onChange={(e) => setFilterType(e.target.value as 'name' | 'age')}
-      >
-        <option value='name'>Nome</option>
-        <option value='age'>Idade</option>
-      </select>
       <FixedSizeList
         height={500}
         itemCount={filteredUsers.length}
@@ -71,7 +68,7 @@ export const Home: React.FC = () => {
         width={300}
         itemData={filteredUsers}
       >
-        {RowRenderer}
+        {ListItemRenderer}
       </FixedSizeList>
     </>
   )

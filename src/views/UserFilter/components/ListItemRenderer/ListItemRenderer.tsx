@@ -1,13 +1,13 @@
 import React from 'react'
-import { User } from '../../Home'
+import { User } from '../../UserFilter'
 
-type RowRendererProps = {
+type ListItemRendererProps = {
   index: number
   style: React.CSSProperties
   data: User[]
 }
 
-export const RowRenderer: React.FC<RowRendererProps> = ({ index, style, data }) => {
+export const ListItemRenderer: React.FC<ListItemRendererProps> = ({ index, style, data }) => {
   const user = data[index]
 
   return (

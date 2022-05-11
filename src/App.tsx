@@ -1,10 +1,10 @@
 import React from 'react';
-import { Home } from './views/Home';
+import { UserFilter } from './views/UserFilter';
 
 function App() {
   return (
     <div className="App">
-      <Home />
+      <UserFilter />
     </div>
   );
 }
