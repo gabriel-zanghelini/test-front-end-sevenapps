@@ -13,7 +13,17 @@ export const FilterInput: React.FC<FilterInputProps> = ({
   onChangeFilterType,
 }) => {
   return (
-    <div style={{ marginTop: '10px', marginBottom: '10px', width: '90%' }}>
+    <div
+      style={{
+        padding: 5,
+        width: '70%',
+        marginTop: 20,
+        marginBottom: 20,
+        borderRadius: 4,
+        border: '1px solid #c9c9c9',
+        backgroundColor: '#f9f9f9',
+      }}
+    >
       <div style={{ textAlign: 'left' }}>
         <Text as='strong'>Filtrar por:</Text>
         <RadioGroup defaultValue='name' onChange={onChangeFilterType} size='sm'>
@@ -25,7 +35,8 @@ export const FilterInput: React.FC<FilterInputProps> = ({
       </div>
       <Input
         size='sm'
-        mt={3}
+        mt={2}
+        backgroundColor='#ffffff'
         placeholder='Palavra-chave'
         disabled={disabled}
         onChange={onChangeFilterInput}

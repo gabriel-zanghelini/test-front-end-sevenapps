@@ -7,13 +7,26 @@ type ListItemRendererProps = {
   data: User[]
 }
 
-export const ListItemRenderer: React.FC<ListItemRendererProps> = ({ index, style, data }) => {
+export const ListItemRenderer: React.FC<ListItemRendererProps> = ({
+  index,
+  style,
+  data,
+}) => {
   const user = data[index]
 
   return (
-    <div style={style}>
-      <strong>{user.name}</strong>
-      <small> | Idade: {user.age}</small>
+    <div
+      style={{
+        ...style,
+        display: 'flex',
+        justifyContent: 'space-around',
+        backgroundColor: '#f9f9f9',
+        borderBottom: '1px solid #ffffff',
+      }}
+    >
+      <span style={{ width: 55 }}>{user.id}</span>
+      <strong style={{ width: 160 }}>{user.name}</strong>
+      <span style={{ width: 65 }}>Idade: {user.age}</span>
     </div>
   )
 }

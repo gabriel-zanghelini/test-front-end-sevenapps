@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Heading } from '@chakra-ui/react'
+import { Heading, Text } from '@chakra-ui/react'
 import { FixedSizeList } from 'react-window'
 import { FilterInput } from './components/FilterInput'
 import { ListItemRenderer } from './components/ListItemRenderer'
@@ -7,6 +7,7 @@ import { ListItemRenderer } from './components/ListItemRenderer'
 const USERS_API = 'https://random-persons.herokuapp.com/users'
 
 export type User = {
+  id: number
   name: string
   age: number
 }
@@ -21,10 +22,12 @@ export const UserFilter: React.FC = () => {
     setLoadingUsers(true)
 
     const response = await fetch(USERS_API, { method: 'GET' })
-    const { data } = await response.json()
+    const { data } = (await response.json()) as { data: User[] }
 
-    setUsers(data)
-    setFilteredUsers(data)
+    const usersWithId = data.map((data, index) => ({ ...data, id: index + 1 }))
+    
+    setUsers(usersWithId)
+    setFilteredUsers(usersWithId)
     setLoadingUsers(false)
   }
 
@@ -35,7 +38,7 @@ export const UserFilter: React.FC = () => {
     if (keyword !== '') {
       const results = users.filter((user) => {
         if (filterType === 'name') {
-          return user.name.toLowerCase().startsWith(keyword.toLowerCase())
+          return user.name.toLowerCase().includes(keyword.toLowerCase())
         }
 
         return user.age.toString() === keyword
@@ -56,30 +59,37 @@ export const UserFilter: React.FC = () => {
   return (
     <section
       style={{
-        width: '300px',
+        width: 400,
         margin: 'auto',
+        marginTop: 40,
         display: 'flex',
         alignItems: 'center',
         flexDirection: 'column',
       }}
     >
       <Heading as='h2' size='xl'>
-        Filtro de Usuários
+        Usuários
       </Heading>
-      <span>
-        {loadingUsers ? 'Carregando...' : `Exibindo: ${filteredUsers.length} resultados`}
-      </span>
       <FilterInput
         disabled={loadingUsers}
         onChangeFilterInput={filterUser}
         onChangeFilterType={changeFilterType}
       />
+      <Text
+        fontSize='sm'
+        style={{ width: 350, color: '#c9c9c9', textAlign: 'right' }}
+      >
+        {loadingUsers
+          ? 'Carregando...'
+          : `Exibindo: ${filteredUsers.length} resultados`}
+      </Text>
       <FixedSizeList
         height={500}
         itemCount={filteredUsers.length}
         itemSize={30}
-        width={300}
+        width={350}
         itemData={filteredUsers}
+        style={{ border: '1px solid #eeeeee', borderRadius: 5 }}
       >
         {ListItemRenderer}
       </FixedSizeList>
