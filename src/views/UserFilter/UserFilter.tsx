@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { Heading } from '@chakra-ui/react'
 import { FixedSizeList } from 'react-window'
 import { FilterInput } from './components/FilterInput'
 import { ListItemRenderer } from './components/ListItemRenderer'
@@ -45,17 +46,29 @@ export const UserFilter: React.FC = () => {
     }
   }
 
-  const changeFilterType: React.ChangeEventHandler<HTMLSelectElement> = (e) =>
-    setFilterType(e.target.value as 'name' | 'age')
+  const changeFilterType: (nextValue: string) => void = (nextValue) =>
+    setFilterType(nextValue as 'name' | 'age')
 
   useEffect(() => {
     getUsers()
   }, [])
 
   return (
-    <>
-      <h1>Listagem de Usuários ({filteredUsers.length})</h1>
-      {loadingUsers ? <h2>Carregando...</h2> : null}
+    <section
+      style={{
+        width: '300px',
+        margin: 'auto',
+        display: 'flex',
+        alignItems: 'center',
+        flexDirection: 'column',
+      }}
+    >
+      <Heading as='h2' size='xl'>
+        Filtro de Usuários
+      </Heading>
+      <span>
+        {loadingUsers ? 'Carregando...' : `Exibindo: ${filteredUsers.length} resultados`}
+      </span>
       <FilterInput
         disabled={loadingUsers}
         onChangeFilterInput={filterUser}
@@ -70,6 +83,6 @@ export const UserFilter: React.FC = () => {
       >
         {ListItemRenderer}
       </FixedSizeList>
-    </>
+    </section>
   )
 }
